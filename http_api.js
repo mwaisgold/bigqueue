@@ -123,14 +123,17 @@ app.post("/topics/:topic/messages",function(req,res){
             var message
             try{
                 message = JSON.parse(data)
-                if(message.msg instanceof Object){
-                    var orig = message.msg
+                for (var key in message){
+                  var value = message[key]
+                  if (message[key] instanceof Object){
+                    var orig = message[key]
                     try{
-                        message.msg = JSON.stringify(message.msg) 
-                        message._json="true"
-                    }catch(e){
-                        nessage.msg = orig
+                      message[key] = JSON.stringify(message[key])
+                      message._json="true"
+                    }catch (e){
+                      message.msg=orig
                     }
+                  }
                 }
             }catch(e){
                 res.json({err:"Error parsing json ["+e+"]"},400)
